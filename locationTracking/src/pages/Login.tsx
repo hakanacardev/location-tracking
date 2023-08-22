@@ -22,7 +22,7 @@ const Login: React.FC<Iprops> = props => {
   });
   const getUsers = async () => {
     const users = await firestore().collection('users').get();
-    console.log('users', users.docs[0]);
+    console.log('users', users.docs[0].data);
   };
   useEffect(() => {
     getUsers();
