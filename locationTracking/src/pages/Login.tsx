@@ -1,4 +1,5 @@
 import {
+  PermissionsAndroid,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -27,7 +28,25 @@ const Login: React.FC<Iprops> = props => {
   useEffect(() => {
     getUsers();
   }, []);
-
+  async function requestGeolocationPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        'android.permission.ACCESS_FINE_LOCATION',
+        {
+          title: 'Ridesharer Geolocation Permission',
+          message:
+            'Ridesharer needs access to your current location so you can share or search for a ride',
+        } as any,
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the geolocation');
+      } else {
+        console.log('Geolocation permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  }
   return (
     <>
       <SafeAreaView style={styles.root}>
@@ -49,7 +68,8 @@ const Login: React.FC<Iprops> = props => {
         />
         <TouchableOpacity
           style={styles.button}
-          onPress={() =>
+          onPress={() => {
+            requestGeolocationPermission();
             navigation.reset({
               index: 0,
               routes: [
@@ -57,8 +77,8 @@ const Login: React.FC<Iprops> = props => {
                   name: 'MyTabs',
                 },
               ],
-            })
-          }>
+            });
+          }}>
           <Text style={styles.text}>{'Giriş Yap'}</Text>
         </TouchableOpacity>
       </SafeAreaView>
