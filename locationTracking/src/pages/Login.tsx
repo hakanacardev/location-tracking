@@ -6,14 +6,28 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {StackParams} from '../../App';
+import firestore from '@react-native-firebase/firestore';
 
 interface Iprops {}
 const Login: React.FC<Iprops> = props => {
+  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
+  const getUsers = async () => {
+    const users = await firestore().collection('users').get();
+    console.log('users', users.docs[0]);
+  };
+  useEffect(() => {
+    getUsers();
+  }, []);
+
   return (
     <>
       <SafeAreaView style={styles.root}>
@@ -33,7 +47,18 @@ const Login: React.FC<Iprops> = props => {
           placeholder={'Password Giriniz'}
           placeholderTextColor="#000"
         />
-        <TouchableOpacity style={styles.button} onPress={() => null}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() =>
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'MyTabs',
+                },
+              ],
+            })
+          }>
           <Text style={styles.text}>{'Giriş Yap'}</Text>
         </TouchableOpacity>
       </SafeAreaView>

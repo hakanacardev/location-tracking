@@ -10,10 +10,12 @@ import {
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Login from './pages/Login';
+import Login from './src/pages/Login';
+import MyTabs from './src/pages/BottomTab';
 
 export type StackParams = {
   Login: any;
+  MyTabs: any;
 };
 
 function App(): JSX.Element {
@@ -24,6 +26,7 @@ function App(): JSX.Element {
         initialRouteName="Login"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="MyTabs" component={MyTabs} />
       </Stack.Navigator>
     </NavigationContainer>
   );
